@@ -1,0 +1,176 @@
+<!DOCTYPE html> 
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Digidiya Console</title>
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+     <link href="css/style.css" rel="stylesheet">
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+      <script type="text/javascript"></script>
+       <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.css" rel="stylesheet">
+      <link href="css/home.css" rel="stylesheet">
+   </head>
+   <body oncontextmenu="return false" class="snippet-body">
+       <div class="loading"></div>
+      <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+         <div class="card card0 border-0">
+            <div class="row d-flex">
+               <div class="col-lg-6">
+                  <div class="card1 pb-5">
+                     <div class="row"> <img src="images/logo.png" class="logo"> </div>
+                     <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png" class="image"> </div>
+                  </div>
+               </div>
+               <div class="col-lg-6">
+                  <div class="card2 card border-0 px-4 py-5">
+                     <div class="row mb-4 px-3">
+                        <h6 class="mb-0 mr-4 mt-2">“You're off to great places, today is your day....</h6>
+                        <!---   <div class="facebook text-center mr-3">
+                           <div class="fa fa-facebook"></div>
+                           </div>
+                           <div class="twitter text-center mr-3">
+                           <div class="fa fa-twitter"></div>
+                           </div>
+                           <div class="linkedin text-center mr-3">
+                           <div class="fa fa-linkedin"></div>
+                           </div>-->
+                     </div>
+                     <div class="row px-3 mb-4">
+                        <!-- <div class="line"></div> <small class="or text-center">Or</small> -->
+                        <div class="line"></div>
+                     </div>
+                      <form method="post"  class="form-signin"  id="onpageContactForm" enctype="multipart/form-data">
+                     <div class="row px-3">
+                        <label class="mb-1">
+                           <h6 class="mb-0 text-sm">Email Address</h6>
+                        </label>
+                        <input class="mb-4" type="text" id="email" name="email" placeholder="Enter a valid email address"> 
+                     </div>
+                     <div class="row px-3">
+                        <label class="mb-1">
+                           <h6 class="mb-0 text-sm">Password</h6>
+                        </label>
+                        <input type="password" id="password" name="password" placeholder="Enter password"> 
+                     </div>
+                     <div class="row px-3 mb-4">
+                        <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input"> <label for="chk1" class="custom-control-label text-sm">Remember me</label> </div>
+                        <!--<a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a> -->
+                     </div>
+                     <div class="row mb-3 px-3"> <button type="submit" class="btn btn-blue text-center">Login</button> </div>
+                     <!--    <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a class="text-danger ">Register</a></small> </div> -->
+                  </form>
+               </div>
+            </div>
+            </div>
+            <div class="bg-blue py-4">
+               <div class="row px-3">
+                  <small class="ml-4 ml-sm-5 mb-2">Copyright © 2021. All rights reserved.</small>
+                  <div class="social-contact ml-4 ml-sm-auto"> <span class="fa fa-facebook mr-4 text-sm"></span> <span class="fa fa-google-plus mr-4 text-sm"></span> <span class="fa fa-linkedin mr-4 text-sm"></span> <span class="fa fa-twitter mr-4 mr-sm-5 text-sm"></span> </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      
+       <script>
+         $(function() {
+         $("#onpageContactForm").on('submit', function(event) {
+         $(this).find("button[type='submit']").prop('disabled',true);
+        
+                    $('.loading').show(); 
+                    var email = $("input#email").val(); 
+                    var password = $("input#password").val(); 
+                    $.ajax({ 
+                   type:"POST",
+                    url: 'https://cloud.digidiya.com/api/login.php',
+                  data: "email=" + email + "&password=" +password,
+                    dataType: "json",
+                  processData: true,
+                  timeout: 60000,
+                    success:function(data){
+                     var Error = data.error;
+                     var message=data.message;
+                   //alert(response);
+                  if(Error !=true){
+                    var user=data.username;
+                    localStorage.setItem("sname",user);
+                    localStorage.setItem("message",message);
+                     starts();
+                  }
+                  else{
+                    
+                  $(this).find("button[type='submit']").prop('disabled',false);
+                  $('.loading').hide();   
+                  localStorage.setItem("message",message);
+                  start(); 
+                  }
+                         //$("#quote").append(data[0].content)
+                     },
+                     cache: false
+                 }); 
+               event.preventDefault(); 
+             });
+         });       
+      </script>
+      <script>
+         function start(){
+         var message=localStorage.getItem("message");
+         showToastr("error", "Error", message);  
+         setTimeout(loadResponse, 3000); // Setting arbitrary timeout here so we can see the 'loading' state.
+         localStorage.removeItem("message");
+         };
+            function starts(){
+         var message=localStorage.getItem("message");
+         showToastr("success", "Success", message);  
+         setTimeout(loadResponse, 3000); // Setting arbitrary timeout here so we can see the 'loading' state.
+         localStorage.removeItem("message");
+           window.location.href = 'dashboard.php';
+         };
+         function showToastr(type, title, message) {
+           let body;
+           toastr.options = {
+           "closeButton": true,
+           "debug": false,
+           "newestOnTop": false,
+           "progressBar": false,
+           "positionClass": "toast-bottom-right",
+           "preventDuplicates": true,
+           "showDuration": "300",
+           "hideDuration": "1000",
+           "timeOut": 0,
+           "onclick": null,
+           "onCloseClick": null,
+           "extendedTimeOut": 0,
+           "showEasing": "swing",
+           "hideEasing": "linear",
+           "showMethod": "fadeIn",
+           "hideMethod": "fadeOut",
+           "tapToDismiss": false
+         };
+          switch(type){
+          case "info": body = "<span> <i class='fa fa-spinner fa-pulse'></i></span>";
+          break;
+          default: body = '';
+                      }
+         const content = message + body;
+         toastr[type](content, title)
+         window.setTimeout(function(){
+             location.reload()},3000)
+         }
+         $('button').click(function(){
+         $('.pop-up').addClass('open');
+         });
+         
+         $('.pop-up .close').click(function(){
+         $('.pop-up').removeClass('open');
+         });
+      </script>
+      <script>var sname=localStorage.getItem("sname");
+           if(sname!=null){ window.location.href = 'dashboard.php';}</script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+   </body>
+</html>

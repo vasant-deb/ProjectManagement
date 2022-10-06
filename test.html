@@ -1,0 +1,47 @@
+	<p class="timertext"
+		style="font-size: 1.5rem;"> 
+		You are idle for 
+		<span class="secs"></span> seconds. 
+	</p> 
+	
+	<script type="text/javascript"> 
+		var currSeconds = 0; 
+		
+		$(document).ready(function() { 
+
+			/* Increment the idle time 
+				counter every second */ 
+			let idleInterval = 
+				setInterval(timerIncrement, 1000); 
+
+			/* Zero the idle timer 
+				on mouse movement */ 
+			$(this).mousemove(resetTimer); 
+			$(this).keypress(resetTimer); 
+		}); 
+
+		function resetTimer() { 
+
+			/* Hide the timer text */ 
+			document.querySelector(".timertext") 
+				.style.display = 'none'; 
+			
+			currSeconds = 0; 
+		} 
+
+		function timerIncrement() { 
+			currSeconds = currSeconds + 1; 
+
+			/* Set the timer text to 
+				the new value */ 
+		 
+if(currSeconds>5){
+    	document.querySelector(".secs") 
+				.textContent = currSeconds;
+					document.querySelector(".timertext") 
+				.style.display = 'block'; 
+}
+			/* Display the timer text */ 
+		
+		} 
+	</script> 
